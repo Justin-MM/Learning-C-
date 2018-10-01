@@ -1,2 +1,2 @@
 # Learning-C-
-All class projects code
+All my class project's code
