@@ -20,7 +20,11 @@ namespace theIfStatement
                 Console.WriteLine("Sorry! You are out of luck today.");
             else
             {
-                Console.WriteLine("Sorry! That's invalid. Try again with a number between 1 and 3");
+                //4 is our magic number. We won't even reveal it has a price till its chosen.
+                //sorry if the user enters anything else
+                string message = (userValue == "4") ? "Hidden Treasures: You won a trip to Dubai!" : 
+                    "Sorry! That's invalid. Try again with a number between 1 and 3";
+                Console.WriteLine(message);
             }
             Console.ReadLine();
         }
