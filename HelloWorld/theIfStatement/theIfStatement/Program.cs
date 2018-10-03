@@ -15,13 +15,9 @@ namespace theIfStatement
             string userValue = Console.ReadLine();
 
             if (userValue == "2")
-            {
                 Console.WriteLine("Yeessss! You won a Ford Ranger");
-            }
             else if (userValue == "1" | userValue == "3")
-            {
                 Console.WriteLine("Sorry! You are out of luck today.");
-            }
             else
             {
                 Console.WriteLine("Sorry! That's invalid. Try again with a number between 1 and 3");
