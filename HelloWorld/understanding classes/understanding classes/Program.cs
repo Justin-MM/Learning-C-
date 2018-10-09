@@ -22,6 +22,15 @@ namespace understanding_classes
                 myCar.color,
                 myCar.year,
                 myCar.DetermineMarketValue());
+
+            Car myOtherCar = new Car("Toyota", "Prado V8", 2018, "White");
+
+            Console.WriteLine("I won a {0}, it is {1} in color. " +
+                "It's also a {2} model so its market value is roughly about {3:C}",
+                myOtherCar.model,
+                myOtherCar.color,
+                myOtherCar.year,
+                myOtherCar.DetermineMarketValue());
             Console.ReadLine();
         }
     }
@@ -34,6 +43,19 @@ namespace understanding_classes
         public string color { get; set; }
         public int year { get; set; }
         public string model { get; set; }
+
+        public Car()
+        {
+
+        }
+
+        public Car(string Make, string Model, int Year, string Color)
+        {
+            make = Make;
+            model = Model;
+            year = Year;
+            color = Color;
+        }
 
         public decimal DetermineMarketValue()
         {
