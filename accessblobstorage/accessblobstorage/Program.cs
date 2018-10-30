@@ -24,10 +24,7 @@ namespace accessblobstorage
             ListAttributes(container);
             SetMetadata(container);
             ListMetadata(container);
-
-            
-            
-
+                                
         }
         public static void Uploadblob(CloudBlobContainer container)
         {
@@ -63,6 +60,13 @@ namespace accessblobstorage
                 Console.WriteLine("Value " + item.Value);
                 Console.ReadLine();
             }
+        }
+        // programmatically make a copy of a blob within azure
+        public static void CopyBlob(CloudBlobContainer container)
+        {
+            CloudBlockBlob blockBlob = container.GetBlockBlobReference("images");
+            CloudBlockBlob copyToBlockBlob = container.GetBlockBlobReference("images-copy");
+            copyToBlockBlob.StartCopyAsync(new Uri(blockBlob.Uri.AbsoluteUri));
         }
     }
 }
