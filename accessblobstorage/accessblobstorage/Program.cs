@@ -24,6 +24,7 @@ namespace accessblobstorage
             ListAttributes(container);
             SetMetadata(container);
             ListMetadata(container);
+            CopyBlob(container);
                                 
         }
         public static void Uploadblob(CloudBlobContainer container)
