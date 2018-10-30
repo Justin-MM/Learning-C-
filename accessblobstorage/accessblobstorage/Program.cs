@@ -25,6 +25,7 @@ namespace accessblobstorage
             SetMetadata(container);
             ListMetadata(container);
             CopyBlob(container);
+            CreateSubDirectories(container);
                                 
         }
         public static void Uploadblob(CloudBlobContainer container)
@@ -32,6 +33,15 @@ namespace accessblobstorage
             using (var filestream = System.IO.File.OpenRead(@"C:\\Users\\Justin Macharia\\Pictures\\Camera Roll\\WIN_20180918_18_02_36_Pro.jpg"))
             {
                 CloudBlockBlob blockblob = container.GetBlockBlobReference("images");
+                blockblob.UploadFromStream(filestream);
+            }
+        }
+
+        public static void Uploadblob(CloudBlobDirectory blobDirectory)
+        {
+            using (var filestream = System.IO.File.OpenRead(@"C:\\Users\\Justin Macharia\\Pictures\\Camera Roll\\WIN_20180918_18_02_36_Pro.jpg"))
+            {
+                CloudBlockBlob blockblob = blobDirectory.GetBlockBlobReference("images");
                 blockblob.UploadFromStream(filestream);
             }
         }
@@ -68,6 +78,13 @@ namespace accessblobstorage
             CloudBlockBlob blockBlob = container.GetBlockBlobReference("images");
             CloudBlockBlob copyToBlockBlob = container.GetBlockBlobReference("images-copy");
             copyToBlockBlob.StartCopyAsync(new Uri(blockBlob.Uri.AbsoluteUri));
+        }
+
+        // create subdirectories in blob storage
+        public static void CreateSubDirectories(CloudBlobContainer container)
+        {
+            CloudBlobDirectory blobDirectory = container.GetDirectoryReference("Personal Images");
+            Uploadblob(blobDirectory);
         }
     }
 }
