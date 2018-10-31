@@ -20,11 +20,16 @@ namespace AccessTableStorage
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             CloudTable table = tableClient.GetTableReference("TestTable");
             table.CreateIfNotExists();
-
-            // CarEntity myCar = new CarEntity(1, "Ford", "Ranger", 2017, "Black");
-            // TableOperation insert = TableOperation.Insert(myCar);
-            // table.Execute(insert);
-
+            /*
+            CarEntity myCar = new CarEntity(2, "Toyota", "Prado V8", 2016, "White");
+            InsertToTable(table, myCar);
+            myCar = new CarEntity(3, "Honda", "Civic", 2012, "Yellow");
+            InsertToTable(table, myCar);
+            myCar = new CarEntity(4, "Subaru", "Imprezza", 2010, "Blue");
+            InsertToTable(table, myCar);
+            myCar = new CarEntity(5, "Range Rover", "Evoque", 2015, "White");
+            InsertToTable(table, myCar);
+            */
             TableOperation retrieve = TableOperation.Retrieve<CarEntity>("car", "1");
             TableResult result = table.Execute(retrieve);
 
@@ -34,9 +39,20 @@ namespace AccessTableStorage
             }
             else
             {
-                Console.WriteLine("Found Car " + ((CarEntity)result.Result).Make + " " + ((CarEntity)result.Result).Model);
-            }
+                TableQuery<CarEntity> query = new TableQuery<CarEntity>();
+                foreach (CarEntity thisCar in table.ExecuteQuery(query))
+                {
+                    Console.WriteLine("Found Car " + thisCar.Make + " " + thisCar.Model + " " + thisCar.Year.ToString());
+                }
+                
+            } 
             Console.ReadLine();
+        }
+
+        public static void InsertToTable(CloudTable table, CarEntity car)
+        {
+            TableOperation insert = TableOperation.Insert(car);
+            table.Execute(insert);
         }
     }
 
