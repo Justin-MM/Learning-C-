@@ -7,6 +7,7 @@ using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System.Configuration;
+using Microsoft.WindowsAzure.Storage.Shared.Protocol;
 
 namespace accessblobstorage
 {
@@ -26,7 +27,9 @@ namespace accessblobstorage
             ListMetadata(container);
             CopyBlob(container);
             CreateSubDirectories(container);
-                                
+            CreateSharedAccessPolicy(container);
+            CreateCorsPolicy(blobClient);
+            Console.ReadLine();
         }
         public static void Uploadblob(CloudBlobContainer container)
         {
@@ -51,7 +54,7 @@ namespace accessblobstorage
             container.FetchAttributes();
             Console.WriteLine("container name " + container.StorageUri.PrimaryUri.ToString());
             Console.WriteLine("last modified " + container.Properties.LastModified.ToString());
-            Console.ReadLine();
+            
         }
 
         public static void SetMetadata(CloudBlobContainer container)
@@ -69,7 +72,6 @@ namespace accessblobstorage
             {
                 Console.WriteLine("key " + item.Key);
                 Console.WriteLine("Value " + item.Value);
-                Console.ReadLine();
             }
         }
         // programmatically make a copy of a blob within azure
@@ -85,6 +87,37 @@ namespace accessblobstorage
         {
             CloudBlobDirectory blobDirectory = container.GetDirectoryReference("Personal Images");
             Uploadblob(blobDirectory);
+        }
+
+        // create sharedAccessPolicies
+        public static void CreateSharedAccessPolicy(CloudBlobContainer container)
+        {
+            //create shared access policy
+            SharedAccessBlobPolicy sharedPolicy = new SharedAccessBlobPolicy()
+            {
+                SharedAccessExpiryTime = DateTime.UtcNow.AddHours(24),
+                Permissions = SharedAccessBlobPermissions.Read | SharedAccessBlobPermissions.Write | SharedAccessBlobPermissions.List
+            };
+
+            //get current permissions
+            BlobContainerPermissions permissions = new BlobContainerPermissions();
+
+            //apply the new permissions
+            permissions.SharedAccessPolicies.Clear();
+            permissions.SharedAccessPolicies.Add("PolicyName", sharedPolicy);
+            container.SetPermissions(permissions);
+        }
+
+        public static void CreateCorsPolicy(CloudBlobClient blobClient)
+        {
+            ServiceProperties sp = new ServiceProperties();
+            sp.Cors.CorsRules.Add(new CorsRule()
+            {
+                AllowedMethods = CorsHttpMethods.Get,
+                AllowedOrigins = new List<String>() { "http://localhost:8080/" },
+                MaxAgeInSeconds = 3600,
+            });
+            blobClient.SetServiceProperties(sp);
         }
     }
 }
